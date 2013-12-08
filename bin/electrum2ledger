@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+
+require 'trollop'
+
+require 'ledger-bitcoin'
+
+opts = Trollop::options do
+  version "electrum2ledger, part of ledger-bitcoin #{LedgerBitcoin.version_string} (c) Maximilian Wolter (Prof. MAAD) 2013"
+
+  banner <<-EOS
+electrum2ledger extracts the transaction history from an electrum wallet as ledger transactions
+
+Usage:
+\telectrum2ledger [options] <bitcoin assets account> [<electrum_transactions.csv file>]
+
+where <bitcoin assets account> is your ledger assets account for this bitcoin wallet.
+If the optional <electrum_transactions.csv file> parameter is specified, the transactions will be read from that csv file exported from ledger via the "Export history" option, otherwise the history will be retrieved via the electrum cli.
+
+The following [options] are available:
+EOS
+
+  opt :old_transactions, 'Include old (already imported) transactions in the output (also see \'ledger-file\' option)', short: 'o', default: false
+
+  #opt :config, 'Path to ledger-bitcoin config file', short: 'c', type: string, default: '~/.ledgerbitcoinrc'
+  opt :ledger_file, 'Path to ledger file to use for checking for already imported transactions (also see \'old-transactions\' option)', short: 'l', type: :string
+  opt :wallet, 'Path of electrum wallet file to use', short: 'w', type: :string
+end
+
+wallet_asset_account = ARGV.shift
+if(wallet_asset_account.nil? or wallet_asset_account.empty?)
+  $stderr.puts 'Parameter <bitcoin assets account> must be specified.'
+  $stderr.puts 'See help via \'-h\' for details.'
+  exit 1
+end
+
+transactions_csv_file = ARGV.shift
+
+if(opts[:old_transactions])
+  last_imported_transaction = nil
+else
+  last_imported_transaction = LedgerBitcoin::Ledger.last_matching_transaction("#{wallet_asset_account} and %import_source=electrum", (opts[:ledger_file] ? opts[:ledger_file] : LedgerBitcoin::LEDGER_FILE)).last
+end
+
+if(transactions_csv_file)
+  transactions = LedgerBitcoin::Electrum.transactions_from_csv(transactions_csv_file, wallet_asset_account)
+else
+  transactions = LedgerBitcoin::Electrum.transactions_from_electrum_bin(wallet_asset_account, opts[:wallet])
+end
+
+last_imported_transaction_found = last_imported_transaction.nil?
+transactions.each do |transaction|
+  if(not last_imported_transaction_found)
+    last_imported_transaction_found = transaction.is_equal_to_ledger_posting?(last_imported_transaction)
+    
+    next
+  end
+  
+  puts transaction.to_ledger
+end
