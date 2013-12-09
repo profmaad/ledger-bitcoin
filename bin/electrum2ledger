@@ -14,7 +14,7 @@ Usage:
 \telectrum2ledger [options] <bitcoin assets account> [<electrum_transactions.csv file>]
 
 where <bitcoin assets account> is your ledger assets account for this bitcoin wallet.
-If the optional <electrum_transactions.csv file> parameter is specified, the transactions will be read from that csv file exported from ledger via the "Export history" option, otherwise the history will be retrieved via the electrum cli.
+If the optional <electrum_transactions.csv file> parameter is specified, the transactions will be read from that csv file exported from electrum via the "Export history" option, otherwise the history will be retrieved via the electrum cli.
 
 The following [options] are available:
 EOS
