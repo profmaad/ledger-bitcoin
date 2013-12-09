@@ -8,7 +8,7 @@ opts = Trollop::options do
   version "bitstamp2ledger, part of ledger-bitcoin #{LedgerBitcoin.version_string} (c) Maximilian Wolter (Prof. MAAD) 2013"
 
   banner <<-EOS
-bitstamp2ledger retrieved the transaction history from a Bitstamp account via Bitstamp API and outputs it as ledger transactions.
+bitstamp2ledger retrieves the transaction history from a Bitstamp account via the Bitstamp API and outputs it as ledger transactions.
 
 Usage:
 \tbitstamp2ledger [options] <bitstamp assets account> <bitstamp fees expenses account> [<bitstamp_transactions.csv file>]
