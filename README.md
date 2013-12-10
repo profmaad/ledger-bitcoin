@@ -18,4 +18,5 @@ bitstamp2ledger
 ```bitstamp2ledger``` retrieves the transaction history from a Bitstamp account via the Bitstamp API and outputs it as ledger transactions.
 It can also parse a csv file exported from the Bitstamp website.
 
-To retrieve the transaction history directly via the Bitstamp API, an API key with the "User Transactions" permission must be supplied.
+To retrieve the transaction history directly via the Bitstamp API, an API key with the "User Transactions" permission must be supplied via the ```~/.ledgerbitcoinrc``` config file.
+See the supplied example at ```ledgerbitcoinrc.yml``` for the config file format.

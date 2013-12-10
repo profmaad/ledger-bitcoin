@@ -30,7 +30,7 @@ module LedgerBitcoin
         transaction << " ;electrum_label: #{label}\n" unless (label.nil? or label.empty?)
         transaction << " ;bitcoin_transaction_id: #{transaction_id}\n" unless (transaction_id.nil? or transaction_id.empty?)
         transaction << '  ' << (amount < 0 ? 'Expenses' : 'Income') << ":\n"
-        transaction << "  #{asset_account}  #{BTC_CURRENCY_SYMBOL} #{amount}\n"
+        transaction << '  ' << asset_account << $config.currency_symbol(:BTC) << '  ' << amount.to_s << "\n"
 
         return transaction
       end

@@ -11,7 +11,6 @@ module LedgerBitcoin
     HISTORY_CSV_OPTIONS = {
       :col_sep => ',',
       :row_sep => :auto,
-      #:quote_char => '',
       :headers => true,
       :return_headers => false,
     }
@@ -22,7 +21,7 @@ module LedgerBitcoin
       if(electrum_bin)
         command_string << electrum_bin
       else
-        command_string << ELECTRUM_BIN
+        command_string << $config[:electrum][:binary]
       end
 
       if(wallet_path)

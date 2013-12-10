@@ -1,0 +1,17 @@
+ledger:
+  binary: ledger
+  file: null
+  currencies:
+    BTC: BTC
+    USD: USD
+
+electrum:
+  binary: electrum
+  wallet: null
+
+bitstamp:
+  credentials:
+    client_id: null
+    api_key: null
+    api_secret: null
+  

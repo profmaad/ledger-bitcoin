@@ -13,11 +13,11 @@ module LedgerBitcoin
     }
 
     def self.ledger_base_command(ledger_file)
-      command = LEDGER_BIN
+      command = $config[:ledger][:binary]
       
       if(ledger_file)
         command << " --file #{ledger_file}"
-      elsif(not(LEDGER_FILE.nil? or LEDGER_FILE.empty?))
+      elsif(not($config[:ledger][:file].nil? or $config[:ledger][:file].empty?))
         command << " --file #{LEDGER_FILE}"
       end
       

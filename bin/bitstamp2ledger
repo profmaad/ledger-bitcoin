@@ -21,9 +21,12 @@ EOS
 
   opt :old_transactions, 'Include old (already imported) transactions in the output (also see \'ledger-file\' option)', short: 'o', default: false
 
-  #opt :config, 'Path to ledger-bitcoin config file', short: 'c', type: string, default: '~/.ledgerbitcoinrc'
+  opt :config, 'Path to ledger-bitcoin config file', short: 'c', type: :string, default: '~/.ledgerbitcoinrc'
   opt :ledger_file, 'Path to ledger file to use for checking for already imported transactions (also see \'old-transactions\' option)', short: 'l', type: :string
 end
+
+$config = LedgerBitcoin::Config.new(opts[:config])
+$config[:ledger][:file] = opts[:ledger_file] unless opts[:ledger_file].nil?
 
 bitstamp_asset_account = ARGV.shift
 if(bitstamp_asset_account.nil? or bitstamp_asset_account.empty?)
@@ -40,17 +43,22 @@ end
 
 transactions_csv_file = ARGV.shift
 
+unless(transactions_csv_file or ($config[:bitstamp][:credentials][:client_id] and $config[:bitstamp][:credentials][:api_key] and $config[:bitstamp][:credentials][:api_secret]))
+  $stderr.puts 'API access requires API credentials in config file.'
+  $stderr.puts 'Please specify all of bitstamp:credentials:client_id, bitstamp:credentials:api_key and bitstamp:credentials:api_secret in ' << opts[:config]
+  exit 1
+end
+  
 if(opts[:old_transactions])
   last_imported_transaction = nil
 else
-  last_imported_transaction = LedgerBitcoin::Ledger.last_matching_transaction("#{bitstamp_asset_account} and %import_source=bitstamp and %bitstamp_transaction_index", (opts[:ledger_file] ? opts[:ledger_file] : LedgerBitcoin::LEDGER_FILE)).last
+  last_imported_transaction = LedgerBitcoin::Ledger.last_matching_transaction("#{bitstamp_asset_account} and %import_source=bitstamp and %bitstamp_transaction_index", $config[:ledger][:file]).last
 end
 
 if(transactions_csv_file)
   transactions = LedgerBitcoin::Bitstamp.transactions_from_csv(transactions_csv_file, bitstamp_asset_account, fee_expenses_account)
 else
-  # TEMP
-  transactions = LedgerBitcoin::Bitstamp.transactions_from_api(bitstamp_asset_account, fee_expenses_account, nil, nil, nil, last_imported_transaction)
+  transactions = LedgerBitcoin::Bitstamp.transactions_from_api(bitstamp_asset_account, fee_expenses_account, $config[:bitstamp][:credentials][:client_id].to_s, $config[:bitstamp][:credentials][:api_key].to_s, $config[:bitstamp][:credentials][:api_secret].to_s, last_imported_transaction)
 end
 
 last_imported_transaction_found = ((not transactions_csv_file) or last_imported_transaction.nil?)

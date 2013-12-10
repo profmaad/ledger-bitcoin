@@ -24,7 +24,7 @@ module LedgerBitcoin
 
       transactions = []
       loop do
-        api_transactions = api_consumer.user_transactions(offset, BITSTAMP_API_TRANSACTIONS_BATCH_SIZE, 'asc')
+        api_transactions = api_consumer.user_transactions(offset, $config[:bitstamp][:api_transactions_batch_size], 'asc')
         break if api_transactions.empty?
 
         api_transactions.each_with_index do |api_transaction, index|

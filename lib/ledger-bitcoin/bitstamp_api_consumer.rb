@@ -7,9 +7,9 @@ module LedgerBitcoin
     class APIConsumer
       include HTTParty
 
-      base_uri BITSTAMP_API_BASE_URI
-
       def initialize(client_id, api_key, api_secret)
+        self.class.base_uri $config[:bitstamp][:api_base_uri]
+
         @client_id = client_id
         @api_key = api_key
         @api_secret = api_secret        

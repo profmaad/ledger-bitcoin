@@ -102,16 +102,16 @@ module LedgerBitcoin
         transaction << " ;btc_usd_exchange_rate: #{btc_usd_exchange_rate}\n" unless btc_usd_exchange_rate == 0
         case type
         when :trade
-          transaction << '  ' << fee_account   << '  ' << USD_CURRENCY_SYMBOL << ' ' << fee.to_s        << "\n" unless fee == 0
-          transaction << '  ' << asset_account << '  ' << USD_CURRENCY_SYMBOL << ' ' << (-fee).to_s     << "\n" unless fee == 0
-          transaction << '  ' << asset_account << '  ' << BTC_CURRENCY_SYMBOL << ' ' << btc_amount.to_s << "\n" unless btc_amount == 0
-          transaction << '  ' << asset_account << '  ' << USD_CURRENCY_SYMBOL << ' ' << usd_amount.to_s << "\n" unless usd_amount == 0
+          transaction << '  ' << fee_account   << '  ' << $config.currency_symbol(:USD) << ' ' << fee.to_s        << "\n" unless fee == 0
+          transaction << '  ' << asset_account << '  ' << $config.currency_symbol(:USD) << ' ' << (-fee).to_s     << "\n" unless fee == 0
+          transaction << '  ' << asset_account << '  ' << $config.currency_symbol(:BTC) << ' ' << btc_amount.to_s << "\n" unless btc_amount == 0
+          transaction << '  ' << asset_account << '  ' << $config.currency_symbol(:USD) << ' ' << usd_amount.to_s << "\n" unless usd_amount == 0
         when :deposit, :withdrawal
           transaction << '  ' << 'Assets:' << "\n"
           if btc_amount == 0
-            transaction << '  ' << asset_account << '  ' << USD_CURRENCY_SYMBOL << ' ' << usd_amount.to_s << "\n"
+            transaction << '  ' << asset_account << '  ' << $config.currency_symbol(:USD) << ' ' << usd_amount.to_s << "\n"
           else
-            transaction << '  ' << asset_account << '  ' << BTC_CURRENCY_SYMBOL << ' ' << btc_amount.to_s << "\n"
+            transaction << '  ' << asset_account << '  ' << $config.currency_symbol(:BTC) << ' ' << btc_amount.to_s << "\n"
           end
         end
 
