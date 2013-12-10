@@ -12,6 +12,8 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
 
   s.add_runtime_dependency 'trollop', '>= 2.0'
+  s.add_runtime_dependency 'deep_merge', '>= 1.0.0'
+  s.add_runtime_dependency 'httparty', '>= 0.12.0'
 
   s.files = %x(git ls-files).split("\n")
   s.executables = %x(git ls-files -- bin/*).split("\n").map {|f| File.basename(f)}
