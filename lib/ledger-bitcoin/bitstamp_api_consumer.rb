@@ -9,6 +9,7 @@ module LedgerBitcoin
 
       def initialize(client_id, api_key, api_secret)
         self.class.base_uri $config[:bitstamp][:api_base_uri]
+        self.class.ssl_ca_file File.expand_path(File.join(File.dirname(__FILE__), 'bitstamp.crt'))
 
         @client_id = client_id
         @api_key = api_key
