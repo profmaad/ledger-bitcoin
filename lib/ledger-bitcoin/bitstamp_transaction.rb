@@ -94,12 +94,12 @@ module LedgerBitcoin
 
         # the '()' iskind of a hack to guard against labels enclosed in parantheses
         transaction << date << ' * () ' << label << "\n" 
-        transaction << ' ;import_source: bitstamp' << "\n"
-        transaction << " ;bitstamp_transaction_index: #{bitstamp_transaction_index}\n"
-        transaction << " ;bitstamp_transaction_id: #{bitstamp_transaction_id}\n" unless bitstamp_transaction_id.nil?
-        transaction << " ;bitstamp_order_id: #{order_id}\n" unless order_id.nil?
-        transaction << " ;bitstamp_type: #{type.to_s}\n"
-        transaction << " ;btc_usd_exchange_rate: #{btc_usd_exchange_rate}\n" unless btc_usd_exchange_rate == 0
+        transaction << '  ;import_source: bitstamp' << "\n"
+        transaction << "  ;bitstamp_transaction_index: #{bitstamp_transaction_index}\n"
+        transaction << "  ;bitstamp_transaction_id: #{bitstamp_transaction_id}\n" unless bitstamp_transaction_id.nil?
+        transaction << "  ;bitstamp_order_id: #{order_id}\n" unless order_id.nil?
+        transaction << "  ;bitstamp_type: #{type.to_s}\n"
+        transaction << "  ;btc_usd_exchange_rate: #{btc_usd_exchange_rate}\n" unless btc_usd_exchange_rate == 0
         case type
         when :trade
           transaction << '  ' << fee_account   << '  ' << $config.currency_symbol(:USD) << ' ' << fee.to_s        << "\n" unless fee == 0

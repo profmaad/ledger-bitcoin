@@ -26,9 +26,9 @@ module LedgerBitcoin
 
         # the '()' iskind of a hack to guard against labels enclosed in parantheses
         transaction << date << ' ' << (confirmed ? '*' : '') << ' () ' << label << "\n" 
-        transaction << ' ;import_source: electrum' << "\n"
-        transaction << " ;electrum_label: #{label}\n" unless (label.nil? or label.empty?)
-        transaction << " ;bitcoin_transaction_id: #{transaction_id}\n" unless (transaction_id.nil? or transaction_id.empty?)
+        transaction << '  ;import_source: electrum' << "\n"
+        transaction << "  ;electrum_label: #{label}\n" unless (label.nil? or label.empty?)
+        transaction << "  ;bitcoin_transaction_id: #{transaction_id}\n" unless (transaction_id.nil? or transaction_id.empty?)
         transaction << '  ' << (amount < 0 ? 'Expenses' : 'Income') << ":\n"
         transaction << '  ' << asset_account << $config.currency_symbol(:BTC) << '  ' << amount.to_s << "\n"
 
